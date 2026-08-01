@@ -4,6 +4,68 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── anydown design tokens ───────────────────────────── */
+@theme {
+  --font-grotesk: "Space Grotesk", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --breakpoint-xs: 26rem;
+}
+
+@utility font-grotesk {
+  font-family: var(--font-grotesk);
+}
+
+@utility font-ibm-mono {
+  font-family: var(--font-mono);
+}
+
+@keyframes tw-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes cursor-alex {
+  0% { transform: translate(12vw, 8vh); }
+  15% { transform: translate(40vw, 18vh); }
+  30% { transform: translate(55vw, 30vh); }
+  50% { transform: translate(30vw, 42vh); }
+  65% { transform: translate(15vw, 25vh); }
+  80% { transform: translate(48vw, 12vh); }
+  100% { transform: translate(12vw, 8vh); }
+}
+@keyframes cursor-sara {
+  0% { transform: translate(60vw, 5vh); }
+  20% { transform: translate(22vw, 20vh); }
+  40% { transform: translate(45vw, 38vh); }
+  55% { transform: translate(65vw, 22vh); }
+  75% { transform: translate(30vw, 8vh); }
+  90% { transform: translate(50vw, 32vh); }
+  100% { transform: translate(60vw, 5vh); }
+}
+@keyframes cursor-jin {
+  0% { transform: translate(35vw, 35vh); }
+  18% { transform: translate(18vw, 15vh); }
+  35% { transform: translate(58vw, 10vh); }
+  52% { transform: translate(32vw, 45vh); }
+  70% { transform: translate(52vw, 28vh); }
+  85% { transform: translate(10vw, 35vh); }
+  100% { transform: translate(35vw, 35vh); }
+}
+@keyframes cursor-mila {
+  0% { transform: translate(68vw, 40vh); }
+  12% { transform: translate(38vw, 12vh); }
+  30% { transform: translate(15vw, 28vh); }
+  48% { transform: translate(55vw, 46vh); }
+  65% { transform: translate(42vw, 18vh); }
+  82% { transform: translate(25vw, 38vh); }
+  100% { transform: translate(68vw, 40vh); }
+}
+
 /*
  * Design system definition.
  *
@@ -141,4 +203,14 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
