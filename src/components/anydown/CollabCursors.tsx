@@ -33,7 +33,7 @@ export default function CollabCursors() {
   return (
     <div
       className="absolute inset-0 overflow-hidden pointer-events-none motion-reduce:hidden"
-      style={{ zIndex: 10 }}
+      style={{ zIndex: 40 }}
       aria-hidden="true"
     >
       {CURSORS.map((cursor) => (
