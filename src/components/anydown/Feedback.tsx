@@ -4,19 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import SectionHeader from "./SectionHeader";
-import { submitFeedback, listFeedback, type FeedbackInput } from "@/lib/feedback.functions";
+import { submitFeedback, listFeedback } from "@/lib/feedback.functions";
 
 const categories = ["Bug", "Feature", "Suggestion", "Other"] as const;
-
-const feedbackSchema = {
-  name: z => z.string().trim().max(60, "Name is too long").default("Anonymous"),
-  category: z => z.enum(["Bug", "Feature", "Suggestion", "Other"]),
-  message: z => z.string().trim().min(5, "Message is too short").max(1000, "Message is too long"),
-};
-
-import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().trim().max(60, "Name is too long"),
