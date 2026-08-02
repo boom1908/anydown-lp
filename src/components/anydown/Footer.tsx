@@ -1,7 +1,29 @@
 const columns = [
-  { heading: "APP", links: ["LATEST APK", "SOURCE CODE", "CHANGELOG", "MANIFESTO"] },
-  { heading: "DEVELOPER", links: ["PORTFOLIO", "GITHUB", "REPORT A BUG"] },
-  { heading: "TECH & LEGAL", links: ["YT-DLP CORE", "PRIVACY POLICY", "LICENSE"] },
+  {
+    heading: "APP",
+    links: [
+      { label: "LATEST APK", href: "#" },
+      { label: "SOURCE CODE", href: "#" },
+      { label: "CHANGELOG", href: "#updates" },
+      { label: "MANIFESTO", href: "#credits" },
+    ],
+  },
+  {
+    heading: "DEVELOPER",
+    links: [
+      { label: "PORTFOLIO", href: "#" },
+      { label: "GITHUB", href: "#" },
+      { label: "REPORT A BUG", href: "#feedback" },
+    ],
+  },
+  {
+    heading: "TECH & LEGAL",
+    links: [
+      { label: "YT-DLP CORE", href: "https://github.com/yt-dlp/yt-dlp" },
+      { label: "PRIVACY POLICY", href: "#" },
+      { label: "LICENSE", href: "#" },
+    ],
+  },
 ];
 
 export default function Footer() {
@@ -39,11 +61,11 @@ export default function Footer() {
               </span>
               {col.links.map((link) => (
                 <a
-                  key={link}
-                  href="#"
+                  key={link.label}
+                  href={link.href}
                   className="font-ibm-mono text-[12px] text-[#888888] tracking-[1px] hover:text-[#CCCCCC] transition-colors"
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
             </div>

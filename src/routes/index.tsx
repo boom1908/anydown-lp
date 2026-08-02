@@ -7,6 +7,9 @@ import Features from "@/components/anydown/Features";
 import HowItWorks from "@/components/anydown/HowItWorks";
 import Bento from "@/components/anydown/Bento";
 import Comparison from "@/components/anydown/Comparison";
+import Updates from "@/components/anydown/Updates";
+import Credits from "@/components/anydown/Credits";
+import Feedback from "@/components/anydown/Feedback";
 import FAQ from "@/components/anydown/FAQ";
 import Footer from "@/components/anydown/Footer";
 
@@ -38,6 +41,9 @@ function Index() {
       <HowItWorks />
       <Bento />
       <Comparison />
+      <Updates />
+      <Credits />
+      <Feedback />
       <FAQ />
       <Footer />
     </main>

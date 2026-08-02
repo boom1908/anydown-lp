@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -127,6 +128,19 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: "#111111",
+            border: "1px solid #2D2D2D",
+            color: "#F5F5F0",
+            fontFamily: "var(--font-mono)",
+            fontSize: "12px",
+            letterSpacing: "0.5px",
+          },
+        }}
+      />
     </QueryClientProvider>
   );
 }

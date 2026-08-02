@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 const links = [
   { label: "FEATURES", section: "features" },
   { label: "COMPARE", section: "comparison" },
+  { label: "UPDATES", section: "updates" },
+  { label: "CREDITS", section: "credits" },
+  { label: "FEEDBACK", section: "feedback" },
   { label: "FAQ", section: "faq" },
 ];
 
