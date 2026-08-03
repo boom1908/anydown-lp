@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import logoAsset from "@/assets/anydown-logo.png.asset.json";
 
 const links = [
   { label: "FEATURES", section: "features" },
@@ -56,7 +57,13 @@ export default function Navbar() {
     >
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 h-[60px] px-5 sm:px-6 md:px-[48px] max-w-[1400px] mx-auto">
         <a href="#" className="flex min-w-0 items-center gap-[10px] group">
-          <span className="w-[10px] h-[10px] shrink-0 bg-[#FFD600] group-hover:scale-110 transition-transform" />
+          <img
+            src={logoAsset.url}
+            alt="anydown logo"
+            width={24}
+            height={24}
+            className="w-[24px] h-[24px] shrink-0 object-contain group-hover:scale-110 transition-transform"
+          />
           <span className="font-grotesk text-[13px] font-bold text-[#F5F5F0] tracking-[2.5px]">
             ANYDOWN
           </span>
