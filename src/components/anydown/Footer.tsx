@@ -1,3 +1,5 @@
+import logoAsset from "@/assets/anydown-logo.png.asset.json";
+
 const columns = [
   {
     heading: "APP",
@@ -32,7 +34,13 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row gap-12 md:gap-[80px] px-5 sm:px-6 md:px-[120px] py-12 md:py-[64px]">
         <div className="flex flex-col gap-6 md:w-[280px] md:shrink-0">
           <div className="flex items-center gap-[12px]">
-            <div className="w-[32px] h-[32px] bg-[#FFD600] shrink-0" />
+            <img
+              src={logoAsset.url}
+              alt="anydown logo"
+              width={36}
+              height={36}
+              className="w-[36px] h-[36px] shrink-0 object-contain"
+            />
             <span className="font-grotesk text-[16px] font-bold text-[#FFD600] tracking-[3px]">
               ANYDOWN
             </span>
