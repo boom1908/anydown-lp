@@ -179,7 +179,11 @@ export default function Credits() {
             target="_blank"
             rel="noopener noreferrer"
             className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group ${
-              i === credits.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""
+              i === credits.length - 1
+                ? "sm:col-span-2 lg:col-span-1"
+                : i === credits.length - 2
+                  ? "lg:col-span-2"
+                  : ""
             }`}
           >
             <div className="flex items-center justify-between gap-4">
