@@ -117,10 +117,12 @@ export default function Credits() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
-        {squad.map((member) => (
+        {squad.map((member, i) => (
           <div
             key={member.name}
-            className="flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group"
+            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group ${
+              i === squad.length - 1 && squad.length % 2 === 1 ? "sm:col-span-2" : ""
+            }`}
           >
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
@@ -170,13 +172,19 @@ export default function Credits() {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
-        {credits.map((credit) => (
+        {credits.map((credit, i) => (
           <a
             key={credit.name}
             href={credit.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group"
+            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group ${
+              i === credits.length - 1
+                ? "sm:col-span-2 lg:col-span-1"
+                : i === credits.length - 2
+                  ? "lg:col-span-2"
+                  : ""
+            }`}
           >
             <div className="flex items-center justify-between gap-4">
               <span className="font-grotesk text-[18px] font-bold text-[#F5F5F0] tracking-[1px] group-hover:text-[#FFD600] transition-colors">
