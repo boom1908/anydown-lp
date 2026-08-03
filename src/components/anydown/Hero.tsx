@@ -35,16 +35,24 @@ export default function Hero() {
         <div className="h-10 md:h-[48px]" />
 
         <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-[16px] w-full sm:w-auto">
-          <button className="flex items-center justify-center w-full sm:w-[220px] h-[56px] bg-[#FFD600] hover:bg-[#e6c200] active:bg-[#e6c200] transition-colors">
+          <a
+            href="https://github.com/boom1908/anydown-native/releases/download/v2.0.0/anydown.v2.0.0.apk"
+            className="flex items-center justify-center w-full sm:w-[220px] h-[56px] bg-[#FFD600] hover:bg-[#e6c200] active:bg-[#e6c200] transition-colors"
+          >
             <span className="font-grotesk text-[12px] font-bold text-[#0A0A0A] tracking-[2px]">
               DOWNLOAD NOW
             </span>
-          </button>
-          <button className="flex items-center justify-center w-full sm:w-[200px] h-[56px] bg-[#0A0A0A] border-2 border-[#3D3D3D] hover:border-[#888888] transition-colors">
+          </a>
+          <a
+            href="https://github.com/boom1908/anydown-native"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center w-full sm:w-[200px] h-[56px] bg-[#0A0A0A] border-2 border-[#3D3D3D] hover:border-[#888888] transition-colors"
+          >
             <span className="font-ibm-mono text-[12px] text-[#888888] tracking-[2px]">
               GITHUB REPO
             </span>
-          </button>
+          </a>
         </div>
 
         <div className="h-6 md:h-[24px]" />

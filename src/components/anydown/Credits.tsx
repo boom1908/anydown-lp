@@ -26,7 +26,7 @@ const squad: SquadItem[] = [
       "THE VISUAL FORGE. CRAFTED THE INDUSTRIAL DESIGN LANGUAGE, CONSTRUCTED THE NATIVE APP INTERFACE, AND BUILT THE BRUTALIST UI FOR THIS EXACT WEBSITE.",
     url: "https://www.instagram.com/dominicburtt",
     instagram: "https://www.instagram.com/dominicburtt?igsh=ZjA1dG40cnM0NXRv",
-    roleColor: "#FF6B35",
+    roleColor: "#4ADE80",
   },
   {
     name: "CLAUDE",
@@ -34,7 +34,7 @@ const squad: SquadItem[] = [
     description:
       "THE HEAVY LIFTER. TRANSLATED RAW VIBES INTO FLAWLESS REACT/TAILWIND COMPONENTS, SQUASHED VIEWPORT BUGS, AND OPTIMIZED THE MOBILE WEB EXPERIENCE.",
     url: "https://claude.ai",
-    roleColor: "#60A5FA",
+    roleColor: "#FF6B35",
   },
   {
     name: "GEMINI",
@@ -42,7 +42,7 @@ const squad: SquadItem[] = [
     description:
       "THE FORCE MULTIPLIER. NAVIGATED THE ARCHITECTURE, WROTE THE BASH SCRIPTS, CRAFTED THE MANIFESTO COPY, AND KEPT THE DEVELOPMENT WORKFLOW LETHAL.",
     url: "https://gemini.google.com",
-    roleColor: "#F5F5F0",
+    roleColor: "#60A5FA",
   },
   {
     name: "LOVABLE",
@@ -50,7 +50,7 @@ const squad: SquadItem[] = [
     description:
       "THE DEPLOY LAYER. SHIPPED THE FULL-STACK WEB ARCHITECTURE, SERVER FUNCTIONS, AND THE LIVE FEEDBACK PIPELINE BEHIND THIS SITE.",
     url: "https://lovable.dev",
-    roleColor: "#888888",
+    roleColor: "#FF6289",
   },
 ];
 
