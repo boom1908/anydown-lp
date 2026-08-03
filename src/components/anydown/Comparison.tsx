@@ -32,13 +32,13 @@ export default function Comparison() {
       <div className="-mx-5 sm:-mx-6 md:mx-0 overflow-x-auto">
         <div className="min-w-[840px] px-5 sm:px-6 md:px-0">
           <div className="flex flex-col w-full border border-[#2D2D2D]">
-            <div className="flex w-full h-[56px] bg-[#111111] border-b-2 border-b-[#FFD600]">
-              <div className="flex items-center w-[300px] md:w-[400px] shrink-0 px-[20px] md:px-[32px] border-r border-r-[#2D2D2D]">
+            <div className="grid grid-cols-[300px_repeat(4,minmax(0,1fr))] md:grid-cols-[minmax(280px,1.6fr)_repeat(4,minmax(0,1fr))] w-full h-[56px] bg-[#111111] border-b-2 border-b-[#FFD600]">
+              <div className="flex items-center min-w-0 px-[20px] md:px-[32px] border-r border-r-[#2D2D2D]">
                 <span className="font-grotesk text-[11px] font-bold text-[#888888] tracking-[2px]">
                   FEATURE
                 </span>
               </div>
-              <div className="flex items-center flex-1 px-[20px] md:px-[32px] bg-[#1A1A1A] border-r border-r-[#2D2D2D]">
+              <div className="flex items-center min-w-0 px-[20px] md:px-[32px] bg-[#1A1A1A] border-r border-r-[#2D2D2D]">
                 <span className="font-grotesk text-[11px] font-bold text-[#FFD600] tracking-[2px]">
                   ANYDOWN
                 </span>
@@ -46,9 +46,9 @@ export default function Comparison() {
               {columns.map((tool, i) => (
                 <div
                   key={tool}
-                  className={`flex items-center flex-1 px-[20px] md:px-[32px] ${i < columns.length - 1 ? "border-r border-r-[#2D2D2D]" : ""}`}
+                  className={`flex items-center min-w-0 px-[20px] md:px-[32px] ${i < columns.length - 1 ? "border-r border-r-[#2D2D2D]" : ""}`}
                 >
-                  <span className="font-grotesk text-[11px] font-bold text-[#555555] tracking-[2px]">
+                  <span className="font-grotesk text-[11px] font-bold text-[#555555] tracking-[2px] leading-tight">
                     {tool}
                   </span>
                 </div>
@@ -58,14 +58,14 @@ export default function Comparison() {
             {rows.map((row, i) => (
               <div
                 key={row.feature}
-                className={`flex w-full h-[56px] ${i < rows.length - 1 ? "border-b border-b-[#1D1D1D]" : ""}`}
+                className={`grid grid-cols-[300px_repeat(4,minmax(0,1fr))] md:grid-cols-[minmax(280px,1.6fr)_repeat(4,minmax(0,1fr))] w-full h-[56px] ${i < rows.length - 1 ? "border-b border-b-[#1D1D1D]" : ""}`}
               >
-                <div className="flex items-center w-[300px] md:w-[400px] shrink-0 px-[20px] md:px-[32px] border-r border-r-[#2D2D2D]">
-                  <span className="font-ibm-mono text-[12px] text-[#CCCCCC] tracking-[1px]">
+                <div className="flex items-center min-w-0 px-[20px] md:px-[32px] border-r border-r-[#2D2D2D]">
+                  <span className="font-ibm-mono text-[12px] text-[#CCCCCC] tracking-[1px] truncate">
                     {row.feature}
                   </span>
                 </div>
-                <div className="flex items-center flex-1 px-[20px] md:px-[32px] bg-[#0D0D0D] border-r border-r-[#2D2D2D]">
+                <div className="flex items-center min-w-0 px-[20px] md:px-[32px] bg-[#0D0D0D] border-r border-r-[#2D2D2D]">
                   <span className="font-ibm-mono tracking-[1px] text-[#FFD600] font-bold text-[14px]">
                     {row.anydown}
                   </span>
@@ -73,7 +73,7 @@ export default function Comparison() {
                 {row.others.map((val, j) => (
                   <div
                     key={j}
-                    className={`flex items-center flex-1 px-[20px] md:px-[32px] ${j < row.others.length - 1 ? "border-r border-r-[#2D2D2D]" : ""}`}
+                    className={`flex items-center min-w-0 px-[20px] md:px-[32px] ${j < row.others.length - 1 ? "border-r border-r-[#2D2D2D]" : ""}`}
                   >
                     <span className={`font-ibm-mono tracking-[1px] ${cellClass(val)}`}>{val}</span>
                   </div>
