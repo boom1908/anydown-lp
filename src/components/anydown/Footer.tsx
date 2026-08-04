@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/anydown-logo.png.asset.json";
+
 
 const columns = [
   {
@@ -35,7 +35,7 @@ export default function Footer() {
         <div className="flex flex-col gap-6 md:w-[280px] md:shrink-0">
           <div className="flex items-center gap-[12px]">
             <img
-              src={logoAsset.url}
+              src="/logo.png"
               alt="anydown logo"
               width={36}
               height={36}
