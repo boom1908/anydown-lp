@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 
 import SectionHeader from "./SectionHeader";
-import { submitFeedback, listFeedback } from "@/lib/feedback.functions";
+
+// Your own Google Apps Script Web App URL (from Deploy > New deployment)
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzbY6MPBcrMJjaSd0_jMJFhcb-FM9RkoZCQTbTVhYaJmkLkP58zykqKnKtAvgILoL4q/exec";
 
 const categories = ["Bug", "Feature", "Suggestion", "Other"] as const;
 
@@ -18,6 +20,13 @@ const formSchema = z.object({
 });
 
 type FormData = z.infer<typeof formSchema>;
+
+interface FeedbackItem {
+  timestamp: string;
+  name: string;
+  category: string;
+  message: string;
+}
 
 function formatDate(iso: string) {
   try {
@@ -46,19 +55,30 @@ export default function Feedback() {
     defaultValues: { name: "", category: "Suggestion", message: "" },
   });
 
-  const submitFn = useServerFn(submitFeedback);
-  const listFn = useServerFn(listFeedback);
-
   const { data: items = [], isLoading } = useQuery({
     queryKey: ["feedback"],
-    queryFn: () => listFn(),
+    queryFn: async (): Promise<FeedbackItem[]> => {
+      const res = await fetch(APPS_SCRIPT_URL);
+      if (!res.ok) throw new Error("Failed to load feedback");
+      const json = await res.json();
+      return json.items ?? [];
+    },
     staleTime: 1000 * 60 * 2,
   });
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      await submitFn({ data });
+      // text/plain avoids a CORS preflight that Apps Script doesn't handle —
+      // the script still reads it as JSON via JSON.parse(e.postData.contents)
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+
       toast.success("Feedback submitted. Thanks for helping improve anydown.");
       reset();
       queryClient.invalidateQueries({ queryKey: ["feedback"] });
@@ -82,7 +102,6 @@ export default function Feedback() {
       />
 
       <div className="flex flex-col lg:flex-row w-full gap-8 md:gap-[48px]">
-        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-6 w-full lg:w-[420px] lg:shrink-0 p-6 md:p-[32px] bg-[#111111] border border-[#2D2D2D]"
@@ -148,7 +167,6 @@ export default function Feedback() {
           </button>
         </form>
 
-        {/* Public board */}
         <div className="flex flex-col w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
           <div className="flex items-center h-[56px] px-5 md:px-[24px] bg-[#111111] border-b border-b-[#2D2D2D]">
             <span className="font-grotesk text-[12px] font-bold text-[#888888] tracking-[2px]">
@@ -169,10 +187,7 @@ export default function Feedback() {
           ) : (
             <div className="flex flex-col max-h-[560px] overflow-y-auto bg-[#0A0A0A]">
               {items.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex gap-4 p-5 md:p-[24px] border-b border-b-[#1D1D1D] last:border-b-0"
-                >
+                <div key={i} className="flex gap-4 p-5 md:p-[24px] border-b border-b-[#1D1D1D] last:border-b-0">
                   <div className="flex items-center justify-center w-[40px] h-[40px] shrink-0 bg-[#FFD600]">
                     <span className="font-grotesk text-[14px] font-bold text-[#0A0A0A]">
                       {getInitial(item.name)}
@@ -187,21 +202,9 @@ export default function Feedback() {
                         className="font-ibm-mono text-[10px] tracking-[1.5px] px-[8px] py-[2px] border"
                         style={{
                           color:
-                            item.category === "Bug"
-                              ? "#FF6B35"
-                              : item.category === "Feature"
-                                ? "#FFD600"
-                                : item.category === "Suggestion"
-                                  ? "#60A5FA"
-                                  : "#888888",
+                            item.category === "Bug" ? "#FF6B35" : item.category === "Feature" ? "#FFD600" : item.category === "Suggestion" ? "#60A5FA" : "#888888",
                           borderColor:
-                            item.category === "Bug"
-                              ? "#FF6B35"
-                              : item.category === "Feature"
-                                ? "#FFD600"
-                                : item.category === "Suggestion"
-                                  ? "#60A5FA"
-                                  : "#888888",
+                            item.category === "Bug" ? "#FF6B35" : item.category === "Feature" ? "#FFD600" : item.category === "Suggestion" ? "#60A5FA" : "#888888",
                         }}
                       >
                         {item.category.toUpperCase()}
