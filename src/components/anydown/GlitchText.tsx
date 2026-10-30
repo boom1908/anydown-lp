@@ -14,7 +14,7 @@ export default function GlitchText({
   speed = 40,
 }: TypewriterTextProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [displayed, setDisplayed] = useState("");
+  const [charCount, setCharCount] = useState(0);
   const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
   const hasRun = useRef(false);
@@ -26,7 +26,7 @@ export default function GlitchText({
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
       setStarted(true);
-      setDisplayed(text);
+      setCharCount(text.length);
       setDone(true);
       return;
     }
@@ -44,7 +44,7 @@ export default function GlitchText({
             let i = 0;
             interval = setInterval(() => {
               i++;
-              setDisplayed(text.slice(0, i));
+              setCharCount(i);
               if (i >= text.length) {
                 clearInterval(interval);
                 doneTimer = setTimeout(() => setDone(true), 800);
@@ -65,42 +65,45 @@ export default function GlitchText({
     };
   }, [text, speed, delay]);
 
-  return (
-    <span
-      ref={ref}
-      className={className}
-      style={{ position: "relative", display: "inline-block" }}
-    >
-      <span aria-hidden="true" style={{ visibility: "hidden", whiteSpace: "pre-wrap" }}>
-        {text}
-      </span>
+  const characters = Array.from(text);
 
-      <span
-        aria-live="polite"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          whiteSpace: "pre-wrap",
-        }}
-      >
-        {started ? displayed : ""}
-        {started && !done && (
-          <span
-            style={{
-              display: "inline-block",
-              width: "0.06em",
-              height: "0.85em",
-              backgroundColor: "currentColor",
-              marginLeft: "2px",
-              verticalAlign: "middle",
-              animation: "tw-blink 0.7s step-end infinite",
-            }}
-          />
-        )}
-      </span>
+  return (
+    <span ref={ref} className={`relative inline ${className}`} aria-label={text}>
+      {characters.map((char, index) => {
+        const isVisible = started && index < charCount;
+        const isCurrent =
+          started && !done && (index === charCount - 1 || (charCount === 0 && index === 0));
+
+        if (char === "\n") {
+          return <br key={index} />;
+        }
+
+        return (
+          <span key={index} className="relative inline">
+            <span
+              style={{
+                visibility: isVisible ? "visible" : "hidden",
+              }}
+            >
+              {char}
+            </span>
+            {isCurrent && (
+              <span
+                style={{
+                  position: "absolute",
+                  left: "100%",
+                  top: "10%",
+                  bottom: "10%",
+                  width: "0.06em",
+                  backgroundColor: "currentColor",
+                  marginLeft: "1px",
+                  animation: "tw-blink 0.7s step-end infinite",
+                }}
+              />
+            )}
+          </span>
+        );
+      })}
     </span>
   );
 }

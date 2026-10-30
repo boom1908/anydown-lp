@@ -9,6 +9,18 @@ interface UpdateItem {
 
 const updates: UpdateItem[] = [
   {
+    version: "v3.0.0",
+    date: "OCT 2026",
+    title: "THE UTILITY & SPOTIFY UPGRADE",
+    changes: [
+      "SPOTIFY TRACK RESOLUTION: PASTE ANY SPOTIFY TRACK LINK TO AUTOMATICALLY RESOLVE METADATA AND DOWNLOAD HIGH-FIDELITY AUDIO.",
+      "ENHANCED BACKGROUND SERVICE: INTEGRATED SYSTEM WAKE-LOCKS SO DOWNLOADS CONTINUE UNINTERRUPTED WHEN YOUR SCREEN IS LOCKED.",
+      "IN-APP MP3 CONVERTER: DEDICATED ON-DEVICE TOOL TO CONVERT DOWNLOADED VIDEOS TO MP3 IN BATCHES.",
+      "CUSTOM STORAGE (SAF): FULL STORAGE ACCESS FRAMEWORK SUPPORT TO SAVE MEDIA TO ANY INTERNAL FOLDER OR SD CARD.",
+      "IN-APP AUTO-UPDATER: AUTOMATICALLY CHECKS GITHUB RELEASES ON LAUNCH FOR 1-TAP APK UPDATES.",
+    ],
+  },
+  {
     version: "v2.0",
     date: "AUG 2026",
     title: "THE BRUTALIST REBUILD",
@@ -101,7 +113,7 @@ export default function Updates() {
                         //
                       </span>
                       <span
-                        className="font-ibm-mono text-[12px] md:text-[13px] tracking-[1px] leading-[1.5]"
+                        className="font-ibm-mono text-[13px] md:text-[13px] tracking-[1px] leading-[1.65]"
                         style={{ color: isLatest ? "#AAAAAA" : "#555555" }}
                       >
                         {change}

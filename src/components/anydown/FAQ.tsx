@@ -85,7 +85,7 @@ export default function FAQ() {
                 }}
               >
                 <div className="overflow-hidden">
-                  <p className="font-ibm-mono text-[12px] md:text-[13px] text-[#888888] tracking-[1px] leading-[1.6] pb-8">
+                  <p className="font-ibm-mono text-[13px] md:text-[13px] text-[#888888] tracking-[1px] leading-[1.65] pb-8">
                     {faq.answer}
                   </p>
                 </div>

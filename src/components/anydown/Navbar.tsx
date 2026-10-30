@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const links = [
   { label: "FEATURES", section: "features" },
@@ -19,29 +19,122 @@ export default function Navbar() {
   const [active, setActive] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const navRef = useRef<HTMLElement>(null);
+  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+  const [indicator, setIndicator] = useState<{ left: number; width: number; opacity: number }>({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
+
+  const isClickScrolling = useRef(false);
+  const targetSection = useRef<string | null>(null);
+  const clickTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const updateIndicator = useCallback(() => {
+    if (!active || !buttonRefs.current[active] || !navRef.current) {
+      setIndicator((prev) => ({ ...prev, opacity: 0 }));
+      return;
+    }
+    const btn = buttonRefs.current[active];
+    const nav = navRef.current;
+    if (btn && nav) {
+      const btnRect = btn.getBoundingClientRect();
+      const navRect = nav.getBoundingClientRect();
+      setIndicator({
+        left: btnRect.left - navRect.left,
+        width: btnRect.width,
+        opacity: 1,
+      });
+    }
+  }, [active]);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    updateIndicator();
+    window.addEventListener("resize", updateIndicator);
+    return () => window.removeEventListener("resize", updateIndicator);
+  }, [updateIndicator]);
+
+  const handleNavClick = (section: string) => {
+    setActive(section);
+    targetSection.current = section;
+    isClickScrolling.current = true;
+    if (clickTimeout.current) clearTimeout(clickTimeout.current);
+
+    scrollTo(section);
+
+    // Failsafe timeout to unlock scroll spy after smooth scroll finishes
+    clickTimeout.current = setTimeout(() => {
+      isClickScrolling.current = false;
+      targetSection.current = null;
+    }, 1600);
+  };
+
+  useEffect(() => {
+    const handleScrollEnd = () => {
+      isClickScrolling.current = false;
+      targetSection.current = null;
+      if (clickTimeout.current) clearTimeout(clickTimeout.current);
+    };
+
+    window.addEventListener("scrollend", handleScrollEnd);
+    return () => {
+      window.removeEventListener("scrollend", handleScrollEnd);
+      if (clickTimeout.current) clearTimeout(clickTimeout.current);
+    };
   }, []);
 
   useEffect(() => {
-    const obs: IntersectionObserver[] = [];
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
 
-    links.forEach(({ section }) => {
-      const el = document.getElementById(section);
-      if (!el) return;
-      const o = new IntersectionObserver(
-        ([entry]) => {
-          if (entry?.isIntersecting) setActive(section);
-        },
-        { rootMargin: "-35% 0px -60% 0px" },
-      );
-      o.observe(el);
-      obs.push(o);
-    });
+      // Keep active locked to clicked section during smooth-scroll animation
+      if (isClickScrolling.current && targetSection.current) {
+        const targetEl = document.getElementById(targetSection.current);
+        if (targetEl) {
+          const rect = targetEl.getBoundingClientRect();
+          // Target arrived near the top sticky offset
+          if (Math.abs(rect.top - 80) < 60) {
+            isClickScrolling.current = false;
+            targetSection.current = null;
+          }
+        }
+        return;
+      }
 
-    return () => obs.forEach((o) => o.disconnect());
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // In Hero / top area
+      if (scrollY < 250) {
+        setActive("");
+        return;
+      }
+
+      // Reached near bottom of page
+      if (scrollY + viewportHeight >= documentHeight - 80) {
+        setActive(links[links.length - 1].section);
+        return;
+      }
+
+      // Check sections from bottom to top
+      const headerOffset = 140;
+      for (let i = links.length - 1; i >= 0; i--) {
+        const el = document.getElementById(links[i].section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= headerOffset) {
+            setActive(links[i].section);
+            return;
+          }
+        }
+      }
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
@@ -69,24 +162,36 @@ export default function Navbar() {
         </a>
 
         <div className="flex items-center gap-[20px] sm:gap-[28px] md:gap-[36px]">
-          <nav className="hidden sm:flex items-center gap-[20px] md:gap-[36px]">
+          <nav
+            ref={navRef}
+            className="relative hidden sm:flex items-center gap-[20px] md:gap-[36px] py-1"
+          >
             {links.map(({ label, section }) => {
               const isActive = active === section;
               return (
                 <button
                   key={label}
-                  onClick={() => scrollTo(section)}
-                  className="relative font-ibm-mono text-[10px] tracking-[1.5px] transition-colors duration-150 bg-transparent border-none cursor-pointer"
-                  style={{ color: isActive ? "#FFD600" : "#555" }}
+                  ref={(el) => {
+                    buttonRefs.current[section] = el;
+                  }}
+                  onClick={() => handleNavClick(section)}
+                  className="relative font-ibm-mono text-[10px] tracking-[1.5px] transition-colors duration-200 bg-transparent border-none cursor-pointer py-1"
+                  style={{ color: isActive ? "#FFD600" : "#666666" }}
                 >
                   {label}
-                  <span
-                    className="absolute left-0 -bottom-[3px] h-[1.5px] bg-[#FFD600] transition-all duration-300"
-                    style={{ width: isActive ? "100%" : "0%" }}
-                  />
                 </button>
               );
             })}
+
+            {/* True sliding yellow indicator with neon glow */}
+            <span
+              className="absolute -bottom-[2px] h-[2px] bg-[#FFD600] pointer-events-none transition-all duration-300 ease-out shadow-[0_0_10px_rgba(255,214,0,0.8)]"
+              style={{
+                left: `${indicator.left}px`,
+                width: `${indicator.width}px`,
+                opacity: indicator.opacity,
+              }}
+            />
           </nav>
 
           <a
@@ -134,7 +239,7 @@ export default function Navbar() {
               <button
                 key={label}
                 onClick={() => {
-                  scrollTo(section);
+                  handleNavClick(section);
                   setMenuOpen(false);
                 }}
                 className="flex items-center gap-2 w-full font-ibm-mono text-[12px] tracking-[2px] py-[14px] border-b border-[#141414] transition-colors bg-transparent border-x-0 border-t-0 cursor-pointer"

@@ -7,6 +7,34 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        onLog(level, log, defaultHandler) {
+          if (
+            log.code === "MODULE_LEVEL_DIRECTIVE" ||
+            (typeof log.message === "string" && log.message.includes("use client"))
+          ) {
+            return;
+          }
+          defaultHandler(level, log);
+        },
+        onwarn(warning, defaultHandler) {
+          if (
+            warning.code === "MODULE_LEVEL_DIRECTIVE" ||
+            (typeof warning.message === "string" && warning.message.includes("use client"))
+          ) {
+            return;
+          }
+          defaultHandler(warning);
+        },
+      },
+    },
+  },
+  nitro: {
+    preset: "node-server",
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

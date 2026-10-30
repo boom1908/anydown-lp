@@ -1,0 +1,6 @@
+{
+  "name": "anydown",
+  "description": "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

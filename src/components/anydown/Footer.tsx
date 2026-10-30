@@ -1,5 +1,3 @@
-
-
 const columns = [
   {
     heading: "APP",

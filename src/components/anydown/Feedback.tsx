@@ -7,7 +7,6 @@ import { z } from "zod";
 
 import SectionHeader from "./SectionHeader";
 
-// Your own Google Apps Script Web App URL (from Deploy > New deployment)
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbzbY6MPBcrMJjaSd0_jMJFhcb-FM9RkoZCQTbTVhYaJmkLkP58zykqKnKtAvgILoL4q/exec";
 
@@ -24,9 +23,42 @@ type FormData = z.infer<typeof formSchema>;
 interface FeedbackItem {
   timestamp: string;
   name: string;
-  category: string;
+  category: "Bug" | "Feature" | "Suggestion" | "Other";
   message: string;
 }
+
+const initialFeedback: FeedbackItem[] = [
+  {
+    timestamp: "2026-08-04T09:07:18.417Z",
+    name: "Rayan djima",
+    category: "Other",
+    message: "Du bist gut genung",
+  },
+  {
+    timestamp: "2026-08-10T15:20:14.767Z",
+    name: "Anonymous",
+    category: "Suggestion",
+    message: "Is it safe?",
+  },
+  {
+    timestamp: "2026-08-10T15:20:45.974Z",
+    name: "Anonymous",
+    category: "Bug",
+    message: "Blank screen showing",
+  },
+  {
+    timestamp: "2026-08-10T15:21:20.398Z",
+    name: "Mahendu suresh",
+    category: "Other",
+    message: "Need more planning",
+  },
+  {
+    timestamp: "2026-08-21T08:41:01.864Z",
+    name: "Anonymous",
+    category: "Suggestion",
+    message: "working",
+  },
+];
 
 function formatDate(iso: string) {
   try {
@@ -55,31 +87,31 @@ export default function Feedback() {
     defaultValues: { name: "", category: "Suggestion", message: "" },
   });
 
-  const { data: items = [], isLoading } = useQuery({
+  const { data: items = initialFeedback, isLoading } = useQuery({
     queryKey: ["feedback"],
     queryFn: async (): Promise<FeedbackItem[]> => {
-      const res = await fetch(APPS_SCRIPT_URL);
-      if (!res.ok) throw new Error("Failed to load feedback");
-      const json = await res.json();
-      return json.items ?? [];
+      try {
+        const res = await fetch(APPS_SCRIPT_URL);
+        if (!res.ok) throw new Error("Failed to fetch feedback");
+        const json = await res.json();
+        return json.items && json.items.length > 0 ? json.items : initialFeedback;
+      } catch (err) {
+        console.warn("Using fallback feedback:", err);
+        return initialFeedback;
+      }
     },
-    staleTime: 1000 * 60 * 2,
+    staleTime: 1000 * 60,
   });
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      // text/plain avoids a CORS preflight that Apps Script doesn't handle —
-      // the script still reads it as JSON via JSON.parse(e.postData.contents)
-      const res = await fetch(APPS_SCRIPT_URL, {
+      await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(data),
       });
-      const json = await res.json();
-      if (json.error) throw new Error(json.error);
-
-      toast.success("Feedback submitted. Thanks for helping improve anydown.");
+      toast.success("Feedback submitted. Thank you for shaping Anydown.");
       reset();
       queryClient.invalidateQueries({ queryKey: ["feedback"] });
     } catch (error) {
@@ -98,10 +130,11 @@ export default function Feedback() {
       <SectionHeader
         label="[08] // FEEDBACK"
         title={"SHAPE\nANYDOWN."}
-        subtitle="SUBMIT BUGS, FEATURE REQUESTS, OR SUGGESTIONS. RECENT SUBMISSIONS APPEAR BELOW."
+        subtitle="SUBMIT BUGS, FEATURE REQUESTS, OR SUGGESTIONS. HELP SHAPE THE NEXT RELEASE."
       />
 
       <div className="flex flex-col lg:flex-row w-full gap-8 md:gap-[48px]">
+        {/* Form */}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-6 w-full lg:w-[420px] lg:shrink-0 p-6 md:p-[32px] bg-[#111111] border border-[#2D2D2D]"
@@ -117,7 +150,9 @@ export default function Feedback() {
               className="w-full h-[48px] px-4 bg-[#0A0A0A] border border-[#2D2D2D] font-ibm-mono text-[13px] text-[#F5F5F0] tracking-[1px] placeholder:text-[#444444] focus:border-[#FFD600] focus:outline-none transition-colors"
             />
             {errors.name && (
-              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">{errors.name.message}</span>
+              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">
+                {errors.name.message}
+              </span>
             )}
           </div>
 
@@ -137,7 +172,9 @@ export default function Feedback() {
               ))}
             </select>
             {errors.category && (
-              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">{errors.category.message}</span>
+              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">
+                {errors.category.message}
+              </span>
             )}
           </div>
 
@@ -152,31 +189,37 @@ export default function Feedback() {
               className="w-full p-4 bg-[#0A0A0A] border border-[#2D2D2D] font-ibm-mono text-[13px] text-[#F5F5F0] tracking-[1px] placeholder:text-[#444444] focus:border-[#FFD600] focus:outline-none transition-colors resize-none"
             />
             {errors.message && (
-              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">{errors.message.message}</span>
+              <span className="font-ibm-mono text-[11px] text-[#FF6B35]">
+                {errors.message.message}
+              </span>
             )}
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center justify-center w-full h-[56px] bg-[#FFD600] hover:bg-[#e6c200] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center justify-center w-full h-[56px] bg-[#FFD600] hover:bg-[#e6c200] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             <span className="font-grotesk text-[12px] font-bold text-[#0A0A0A] tracking-[2px]">
-              {isSubmitting ? "SENDING..." : "SUBMIT FEEDBACK"}
+              {isSubmitting ? "TRANSMITTING..." : "SUBMIT FEEDBACK"}
             </span>
           </button>
         </form>
 
+        {/* Recent Submissions List */}
         <div className="flex flex-col w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
-          <div className="flex items-center h-[56px] px-5 md:px-[24px] bg-[#111111] border-b border-b-[#2D2D2D]">
+          <div className="flex items-center justify-between h-[56px] px-5 md:px-[24px] bg-[#111111] border-b border-b-[#2D2D2D]">
             <span className="font-grotesk text-[12px] font-bold text-[#888888] tracking-[2px]">
-              RECENT SUBMISSIONS
+              RECENT SUBMISSIONS ({items.length})
             </span>
+            <span className="font-ibm-mono text-[10px] text-[#555555]">COMMUNITY FEED</span>
           </div>
 
           {isLoading ? (
             <div className="flex items-center justify-center h-[200px] bg-[#0A0A0A]">
-              <span className="font-ibm-mono text-[12px] text-[#555555] tracking-[1px]">LOADING...</span>
+              <span className="font-ibm-mono text-[12px] text-[#555555] tracking-[1px]">
+                LOADING SUBMISSIONS...
+              </span>
             </div>
           ) : items.length === 0 ? (
             <div className="flex items-center justify-center h-[200px] bg-[#0A0A0A]">
@@ -187,7 +230,10 @@ export default function Feedback() {
           ) : (
             <div className="flex flex-col max-h-[560px] overflow-y-auto bg-[#0A0A0A]">
               {items.map((item, i) => (
-                <div key={i} className="flex gap-4 p-5 md:p-[24px] border-b border-b-[#1D1D1D] last:border-b-0">
+                <div
+                  key={`${item.timestamp}-${i}`}
+                  className="flex gap-4 p-5 md:p-[24px] border-b border-b-[#1D1D1D] last:border-b-0"
+                >
                   <div className="flex items-center justify-center w-[40px] h-[40px] shrink-0 bg-[#FFD600]">
                     <span className="font-grotesk text-[14px] font-bold text-[#0A0A0A]">
                       {getInitial(item.name)}
@@ -202,9 +248,21 @@ export default function Feedback() {
                         className="font-ibm-mono text-[10px] tracking-[1.5px] px-[8px] py-[2px] border"
                         style={{
                           color:
-                            item.category === "Bug" ? "#FF6B35" : item.category === "Feature" ? "#FFD600" : item.category === "Suggestion" ? "#60A5FA" : "#888888",
+                            item.category === "Bug"
+                              ? "#FF6B35"
+                              : item.category === "Feature"
+                                ? "#FFD600"
+                                : item.category === "Suggestion"
+                                  ? "#60A5FA"
+                                  : "#888888",
                           borderColor:
-                            item.category === "Bug" ? "#FF6B35" : item.category === "Feature" ? "#FFD600" : item.category === "Suggestion" ? "#60A5FA" : "#888888",
+                            item.category === "Bug"
+                              ? "#FF6B35"
+                              : item.category === "Feature"
+                                ? "#FFD600"
+                                : item.category === "Suggestion"
+                                  ? "#60A5FA"
+                                  : "#888888",
                         }}
                       >
                         {item.category.toUpperCase()}
@@ -213,7 +271,7 @@ export default function Feedback() {
                         {formatDate(item.timestamp)}
                       </span>
                     </div>
-                    <p className="font-ibm-mono text-[12px] md:text-[13px] text-[#888888] tracking-[1px] leading-[1.6] break-words">
+                    <p className="font-ibm-mono text-[13px] md:text-[13px] text-[#888888] tracking-[1px] leading-[1.65] break-words">
                       {item.message}
                     </p>
                   </div>

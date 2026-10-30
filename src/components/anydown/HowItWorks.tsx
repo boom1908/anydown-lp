@@ -26,7 +26,7 @@ function StepCard({
       <h3 className="font-grotesk text-[20px] font-bold text-[#F5F5F0] tracking-[1px] leading-[1.2] whitespace-pre-line">
         {title}
       </h3>
-      <p className="font-ibm-mono text-[11px] text-[#555555] tracking-[1px] leading-[1.5]">
+      <p className="font-ibm-mono text-[12px] md:text-[11px] text-[#555555] tracking-[1px] leading-[1.6]">
         {description}
       </p>
     </div>
@@ -38,7 +38,7 @@ export default function HowItWorks() {
     <section className="flex flex-col w-full bg-[#0D0D0D] py-16 px-5 sm:px-6 md:py-[100px] md:px-[120px] gap-12 md:gap-[64px]">
       <SectionHeader label="[02] // HOW IT WORKS" title={"THREE TAPS.\nDONE DEAL."} />
 
-      <div className="flex flex-col md:flex-row w-full gap-[2px]">
+      <div className="flex flex-col md:flex-row w-full gap-4 md:gap-[2px]">
         <StepCard
           number="01"
           title="PASTE LINK"

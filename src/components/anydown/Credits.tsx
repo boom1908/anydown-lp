@@ -15,7 +15,7 @@ const squad: SquadItem[] = [
     name: "BOOM",
     role: "CORE ARCHITECT",
     description:
-      "THE VISIONARY. ORCHESTRATED THE ENTIRE VIBECODING WORKFLOW AND WIRED THE RAW PYTHON EXTRACTION BACKEND DIRECTLY INTO THE NATIVE KOTLIN FRONTEND.",
+      "PROJECT LEAD & DEVELOPER. WIRED THE PYTHON YT-DLP PIPELINE INTO ANDROID KOTLIN AND LEADS APPLICATION DEVELOPMENT.",
     url: "#hero",
     roleColor: "#FFD600",
   },
@@ -23,34 +23,24 @@ const squad: SquadItem[] = [
     name: "DOMINICBURTT",
     role: "LEAD DESIGNER",
     description:
-      "THE VISUAL FORGE. CRAFTED THE INDUSTRIAL DESIGN LANGUAGE, CONSTRUCTED THE NATIVE APP INTERFACE, AND BUILT THE BRUTALIST UI FOR THIS EXACT WEBSITE.",
+      "VISUAL & UI DESIGN. DESIGNED THE NEO-BRUTALIST SYSTEM, APP LAYOUTS, AND THIS WEBSITE'S INTERFACE.",
     url: "https://www.instagram.com/dominicburtt",
     instagram: "https://www.instagram.com/dominicburtt?igsh=ZjA1dG40cnM0NXRv",
     roleColor: "#4ADE80",
   },
   {
     name: "CLAUDE",
-    role: "FRONTEND FORGE",
-    description:
-      "THE HEAVY LIFTER. TRANSLATED RAW VIBES INTO FLAWLESS REACT/TAILWIND COMPONENTS, SQUASHED VIEWPORT BUGS, AND OPTIMIZED THE MOBILE WEB EXPERIENCE.",
+    role: "FRONTEND ASSIST",
+    description: "COMPONENT ENGINEERING, MOBILE LAYOUT REFINEMENTS, AND REACT/TAILWIND STYLING.",
     url: "https://claude.ai",
     roleColor: "#FF6B35",
   },
   {
     name: "GEMINI",
-    role: "SYSTEM GUIDE",
-    description:
-      "THE FORCE MULTIPLIER. NAVIGATED THE ARCHITECTURE, WROTE THE BASH SCRIPTS, CRAFTED THE MANIFESTO COPY, AND KEPT THE DEVELOPMENT WORKFLOW LETHAL.",
+    role: "SYSTEM ASSIST",
+    description: "TECHNICAL DOCUMENTATION, BUILD SCRIPTING, AND ARCHITECTURE REVIEW.",
     url: "https://gemini.google.com",
     roleColor: "#60A5FA",
-  },
-  {
-    name: "LOVABLE",
-    role: "WEB BACKEND ARCHITECT",
-    description:
-      "THE DEPLOY LAYER. SHIPPED THE FULL-STACK WEB ARCHITECTURE, SERVER FUNCTIONS, AND THE LIVE FEEDBACK PIPELINE BEHIND THIS SITE.",
-    url: "https://lovable.dev",
-    roleColor: "#FF6289",
   },
 ];
 
@@ -73,31 +63,28 @@ const credits: CreditItem[] = [
   {
     name: "FFMPEG",
     description:
-      "THE MEDIA POWERHOUSE RESPONSIBLE FOR MERGING, REMUXING, AND EXTRACTING PURE M4A AUDIO LOCALLY ON YOUR DEVICE.",
+      "THE MEDIA ENGINE RESPONSIBLE FOR MERGING, REMUXING, AND EXTRACTING PURE M4A AUDIO LOCALLY ON YOUR DEVICE.",
     url: "https://ffmpeg.org",
     tag: "FORGE",
     tagColor: "#FF6B35",
   },
   {
     name: "CHAQUOPY",
-    description:
-      "THE BRIDGE. ALLOWS THE YT-DLP PIPELINE TO EXECUTE AS NATIVE PYTHON DIRECTLY ON ANDROID HARDWARE.",
+    description: "THE PYTHON BRIDGE. ENABLES THE YT-DLP PIPELINE TO RUN ON ANDROID HARDWARE.",
     url: "https://chaquo.com/chaquopy",
     tag: "RUNTIME",
     tagColor: "#60A5FA",
   },
   {
     name: "JETPACK COMPOSE",
-    description:
-      "ANDROID'S MODERN NATIVE TOOLKIT. USED TO RENDER EVERY SHADOW, BORDER, AND BUTTON OF ANYDOWN'S BRUTALIST INTERFACE.",
+    description: "ANDROID'S MODERN TOOLKIT FOR BUILDING NATIVE DECLARATIVE USER INTERFACES.",
     url: "https://developer.android.com/compose",
     tag: "UI",
     tagColor: "#F5F5F0",
   },
   {
     name: "COIL",
-    description:
-      "THE LIGHTWEIGHT, ASYNCHRONOUS IMAGE LOADER PULLING IN HIGH-RES VIDEO THUMBNAILS ON THE FLY.",
+    description: "LIGHTWEIGHT, ASYNCHRONOUS IMAGE LOADING FOR VIDEO THUMBNAILS.",
     url: "https://coil-kt.github.io/coil/",
     tag: "MEDIA",
     tagColor: "#888888",
@@ -113,14 +100,14 @@ export default function Credits() {
       <SectionHeader
         label="[07] // CREDITS"
         title={"THE\nSQUAD."}
-        subtitle="THE MINDS AND MACHINES BEHIND THE SYSTEM."
+        subtitle="THE TEAM AND TOOLS BEHIND THE SYSTEM."
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 sm:gap-[2px] border-0 sm:border border-[#2D2D2D] bg-transparent sm:bg-[#2D2D2D]">
         {squad.map((member, i) => (
           <div
             key={member.name}
-            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group ${
+            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] border border-[#2D2D2D] sm:border-0 transition-colors group ${
               i === squad.length - 1 && squad.length % 2 === 1 ? "sm:col-span-2" : ""
             }`}
           >
@@ -148,7 +135,7 @@ export default function Credits() {
                 {member.role}
               </span>
             </div>
-            <p className="font-ibm-mono text-[12px] text-[#666666] tracking-[1px] leading-[1.6]">
+            <p className="font-ibm-mono text-[13px] sm:text-[12px] text-[#666666] tracking-[1px] leading-[1.65]">
               {member.description}
             </p>
             {member.url.startsWith("http") && (
@@ -171,14 +158,14 @@ export default function Credits() {
         subtitle="ANYDOWN IS POSSIBLE BECAUSE OF THESE OPEN PROJECTS AND TOOLS."
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-[2px] border border-[#2D2D2D] bg-[#2D2D2D]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-4 sm:gap-[2px] border-0 sm:border border-[#2D2D2D] bg-transparent sm:bg-[#2D2D2D]">
         {credits.map((credit, i) => (
           <a
             key={credit.name}
             href={credit.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] transition-colors group ${
+            className={`flex flex-col gap-5 p-7 sm:p-8 md:p-[32px] bg-[#111111] hover:bg-[#1A1A1A] border border-[#2D2D2D] sm:border-0 transition-colors group ${
               i === credits.length - 1
                 ? "sm:col-span-2 lg:col-span-1"
                 : i === credits.length - 2
@@ -197,7 +184,7 @@ export default function Credits() {
                 {credit.tag}
               </span>
             </div>
-            <p className="font-ibm-mono text-[12px] text-[#666666] tracking-[1px] leading-[1.6]">
+            <p className="font-ibm-mono text-[13px] sm:text-[12px] text-[#666666] tracking-[1px] leading-[1.65]">
               {credit.description}
             </p>
             <span className="font-ibm-mono text-[11px] text-[#444444] tracking-[1px] group-hover:text-[#888888] transition-colors">

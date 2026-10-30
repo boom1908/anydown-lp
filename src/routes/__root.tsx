@@ -78,11 +78,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "anydown v3.0 — Download Anything. Anywhere. Forever Free." },
+      {
+        name: "description",
+        content:
+          "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.",
+      },
+      { name: "author", content: "anydown" },
+      {
+        property: "og:title",
+        content: "anydown v3.0 — Download Anything. Anywhere. Forever Free.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

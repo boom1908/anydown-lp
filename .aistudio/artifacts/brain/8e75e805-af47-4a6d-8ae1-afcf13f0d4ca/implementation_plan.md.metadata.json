@@ -1,0 +1,6 @@
+{
+  "summary": "Implementation plan to fix the text-wrapping and line overflow glitch across all section headers by animating only section titles with zero layout shift and keeping subtitles static.",
+  "updatedAt": "2026-10-14T20:20:00.173970874Z",
+  "requestFeedback": true,
+  "userFacing": true
+}
