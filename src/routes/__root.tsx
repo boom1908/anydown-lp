@@ -74,21 +74,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "anydown v3.0 — Download Anything. Anywhere. Forever Free." },
+      { title: "Anydown — Download Any Video or Music. 100% Free." },
       {
         name: "description",
         content:
-          "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.",
+          "The fast, ad-free Android downloader for YouTube, Instagram Reels, Spotify, TikTok, and 1,000+ sites. On-device 4K FFmpeg extraction with zero tracking.",
       },
       { name: "author", content: "anydown" },
       {
         property: "og:title",
-        content: "anydown v3.0 — Download Anything. Anywhere. Forever Free.",
+        content: "Anydown — Download Any Video or Music. 100% Free.",
       },
       {
         property: "og:description",
         content:
-          "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.",
+          "The fast, ad-free Android downloader for YouTube, Instagram Reels, Spotify, TikTok, and 1,000+ sites. On-device 4K FFmpeg extraction with zero tracking.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

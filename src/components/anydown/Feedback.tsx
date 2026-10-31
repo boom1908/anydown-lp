@@ -106,10 +106,33 @@ export default function Feedback() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
+      // Capture client IP address with a 2-second timeout (fails gracefully if blocked by ad-blocker)
+      let clientIp = "Unknown";
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2000);
+        const ipRes = await fetch("https://api64.ipify.org?format=json", {
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        if (ipRes.ok) {
+          const ipJson = await ipRes.json();
+          if (ipJson?.ip) clientIp = ipJson.ip;
+        }
+      } catch {
+        // Ignored, fallback to "Unknown"
+      }
+
+      const payload = {
+        ...data,
+        ip: clientIp,
+        timestamp: new Date().toISOString(),
+      };
+
       await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
       toast.success("Feedback submitted. Thank you for shaping Anydown.");
       reset();

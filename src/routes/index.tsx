@@ -13,9 +13,9 @@ import Feedback from "@/components/anydown/Feedback";
 import FAQ from "@/components/anydown/FAQ";
 import Footer from "@/components/anydown/Footer";
 
-const title = "anydown v3.0 — Download Anything. Anywhere. Forever Free.";
+const title = "Anydown — Download Any Video or Music. 100% Free.";
 const description =
-  "Open-source Neo-Brutalist Android downloader for YouTube, Spotify, Instagram, and 1,000+ sites. Native on-device 4K FFmpeg + yt-dlp. No ads, 100% on-device.";
+  "The fast, ad-free Android downloader for YouTube, Instagram Reels, Spotify, TikTok, and 1,000+ sites. On-device 4K FFmpeg extraction with zero tracking.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
