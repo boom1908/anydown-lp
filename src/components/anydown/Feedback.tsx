@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,11 +10,20 @@ import SectionHeader from "./SectionHeader";
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbzbY6MPBcrMJjaSd0_jMJFhcb-FM9RkoZCQTbTVhYaJmkLkP58zykqKnKtAvgILoL4q/exec";
 
-const categories = ["Bug", "Feature", "Suggestion", "Other"] as const;
+const categories = [
+  "Feedback",
+  "Feature",
+  "Bug",
+  "Suggestion",
+  "Question",
+  "Other",
+] as const;
+
+type CategoryType = (typeof categories)[number];
 
 const formSchema = z.object({
   name: z.string().trim().max(60, "Name is too long"),
-  category: z.enum(["Bug", "Feature", "Suggestion", "Other"]),
+  category: z.enum(categories),
   message: z.string().trim().min(5, "Message is too short").max(1000, "Message is too long"),
 });
 
@@ -23,7 +32,7 @@ type FormData = z.infer<typeof formSchema>;
 interface FeedbackItem {
   timestamp: string;
   name: string;
-  category: "Bug" | "Feature" | "Suggestion" | "Other";
+  category: CategoryType | string;
   message: string;
 }
 
@@ -31,13 +40,13 @@ const initialFeedback: FeedbackItem[] = [
   {
     timestamp: "2026-08-04T09:07:18.417Z",
     name: "Rayan djima",
-    category: "Other",
+    category: "Feedback",
     message: "Du bist gut genung",
   },
   {
     timestamp: "2026-08-10T15:20:14.767Z",
     name: "Anonymous",
-    category: "Suggestion",
+    category: "Question",
     message: "Is it safe?",
   },
   {
@@ -49,16 +58,88 @@ const initialFeedback: FeedbackItem[] = [
   {
     timestamp: "2026-08-10T15:21:20.398Z",
     name: "Mahendu suresh",
-    category: "Other",
+    category: "Feedback",
     message: "Need more planning",
   },
   {
     timestamp: "2026-08-21T08:41:01.864Z",
     name: "Anonymous",
-    category: "Suggestion",
+    category: "Feedback",
     message: "working",
   },
 ];
+
+async function getClientIp(): Promise<string> {
+  const timeoutMs = 3500;
+
+  // 1. Try ipify.org (standard IPv4/IPv6 JSON)
+  try {
+    const controller = new AbortController();
+    const timerId = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch("https://api.ipify.org?format=json", {
+      signal: controller.signal,
+    });
+    clearTimeout(timerId);
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.ip) return String(data.ip).trim();
+    }
+  } catch {
+    // fallback
+  }
+
+  // 2. Fallback to Cloudflare trace
+  try {
+    const controller = new AbortController();
+    const timerId = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch("https://cloudflare.com/cdn-cgi/trace", {
+      signal: controller.signal,
+    });
+    clearTimeout(timerId);
+    if (res.ok) {
+      const text = await res.text();
+      const match = text.match(/ip=(.+)/);
+      if (match && match[1]) return match[1].trim();
+    }
+  } catch {
+    // fallback
+  }
+
+  // 3. Fallback to api64.ipify.org
+  try {
+    const controller = new AbortController();
+    const timerId = setTimeout(() => controller.abort(), timeoutMs);
+    const res = await fetch("https://api64.ipify.org?format=json", {
+      signal: controller.signal,
+    });
+    clearTimeout(timerId);
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.ip) return String(data.ip).trim();
+    }
+  } catch {
+    // fallback
+  }
+
+  return "Unknown";
+}
+
+function getCategoryColor(category: string): string {
+  switch (category) {
+    case "Bug":
+      return "#FF6B35";
+    case "Feature":
+      return "#FFD600";
+    case "Feedback":
+      return "#00FF66";
+    case "Suggestion":
+      return "#60A5FA";
+    case "Question":
+      return "#C084FC";
+    default:
+      return "#888888";
+  }
+}
 
 function formatDate(iso: string) {
   try {
@@ -76,6 +157,16 @@ function getInitial(name: string) {
 export default function Feedback() {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cachedIp, setCachedIp] = useState<string>("Unknown");
+
+  // Pre-fetch IP on mount so it's already resolved when the user submits
+  useEffect(() => {
+    getClientIp().then((ip) => {
+      if (ip && ip !== "Unknown") {
+        setCachedIp(ip);
+      }
+    });
+  }, []);
 
   const {
     register,
@@ -84,7 +175,7 @@ export default function Feedback() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", category: "Suggestion", message: "" },
+    defaultValues: { name: "", category: "Feedback", message: "" },
   });
 
   const { data: items = initialFeedback, isLoading } = useQuery({
@@ -103,29 +194,17 @@ export default function Feedback() {
     staleTime: 1000 * 60,
   });
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     try {
-      // Capture client IP address with a 2-second timeout (fails gracefully if blocked by ad-blocker)
-      let clientIp = "Unknown";
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 2000);
-        const ipRes = await fetch("https://api64.ipify.org?format=json", {
-          signal: controller.signal,
-        });
-        clearTimeout(timeout);
-        if (ipRes.ok) {
-          const ipJson = await ipRes.json();
-          if (ipJson?.ip) clientIp = ipJson.ip;
-        }
-      } catch {
-        // Ignored, fallback to "Unknown"
-      }
+      // Use pre-fetched IP or perform a fresh quick lookup
+      const resolvedIp = cachedIp !== "Unknown" ? cachedIp : await getClientIp();
 
       const payload = {
-        ...data,
-        ip: clientIp,
+        name: formData.name,
+        category: formData.category,
+        message: formData.message,
+        ip: resolvedIp,
         timestamp: new Date().toISOString(),
       };
 
@@ -270,22 +349,8 @@ export default function Feedback() {
                       <span
                         className="font-ibm-mono text-[10px] tracking-[1.5px] px-[8px] py-[2px] border"
                         style={{
-                          color:
-                            item.category === "Bug"
-                              ? "#FF6B35"
-                              : item.category === "Feature"
-                                ? "#FFD600"
-                                : item.category === "Suggestion"
-                                  ? "#60A5FA"
-                                  : "#888888",
-                          borderColor:
-                            item.category === "Bug"
-                              ? "#FF6B35"
-                              : item.category === "Feature"
-                                ? "#FFD600"
-                                : item.category === "Suggestion"
-                                  ? "#60A5FA"
-                                  : "#888888",
+                          color: getCategoryColor(item.category),
+                          borderColor: getCategoryColor(item.category),
                         }}
                       >
                         {item.category.toUpperCase()}
