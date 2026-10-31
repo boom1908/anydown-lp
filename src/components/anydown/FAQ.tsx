@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SectionHeader from "./SectionHeader";
+import DeveloperContactModal from "./DeveloperContactModal";
 
 const faqs = [
   {
@@ -31,6 +32,7 @@ const faqs = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(0);
+  const [contactOpen, setContactOpen] = useState(false);
 
   return (
     <section
@@ -100,13 +102,19 @@ export default function FAQ() {
         <span className="font-ibm-mono text-[13px] text-[#555555] tracking-[1px]">
           STILL HAVE QUESTIONS?
         </span>
-        <a
-          href="#"
-          className="font-ibm-mono text-[13px] font-bold text-[#FFD600] tracking-[1px] hover:underline"
+        <button
+          type="button"
+          onClick={() => setContactOpen(true)}
+          className="font-ibm-mono text-[13px] font-bold text-[#FFD600] tracking-[1px] hover:underline cursor-pointer flex items-center gap-1 text-left"
         >
           TALK TO A DEVELOPER &gt;
-        </a>
+        </button>
       </div>
+
+      <DeveloperContactModal
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+      />
     </section>
   );
 }

@@ -1,24 +1,46 @@
-# AnyDown Launchpad
+# ANYDOWN — Bare-Metal Media Extractor
 
-This is a landing page I built for an app called anydown(I built myself). I made this by making changes in a template from v0. Due to credit shortage I couldn't complete the project I need your help
+The ultra-fast, open-source Neo-Brutalist Android media downloader. Native on-device 4K FFmpeg + yt-dlp pipeline for YouTube, Spotify, Instagram, and 1,000+ sites. Zero ads, zero tracking, 100% on-device processing.
 
-This project was built with [Lovable](https://lovable.dev).
+- **Website**: [https://anydown.vercel.app](https://anydown.vercel.app)
+- **Repository**: [boom1908/anydown-lp](https://github.com/boom1908/anydown-lp)
+- **Tech Stack**: TanStack Start, React 19, Vite, Tailwind CSS, TypeScript, Nitro
 
-## Build with Lovable
+---
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/d8880301-0596-4232-9f6b-b1ab8d83096e).
+## Getting Started
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+### Prerequisites
 
-## Development
+- Node.js (v20+ or v22+)
+- npm or bun
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+### Local Development
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+# Clone repository
+git clone https://github.com/boom1908/anydown-lp.git
+cd anydown-lp
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
+
+### Production Build
+
+```sh
+# Build for production
+npm run build
+
+# Start production server
+npm start
+```
+
+---
+
+## License
+
+MIT © 2026 ANYDOWN SYSTEMS
