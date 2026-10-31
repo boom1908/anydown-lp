@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --host 0.0.0.0 --port 3000",
-    "build": "vite build",
+    "build": "NODE_ENV=production vite build",
     "postbuild": "node -e \"const fs=require('fs'); const src=fs.existsSync('.vercel/output/static')?'.vercel/output/static':(fs.existsSync('.output/public')?'.output/public':null); if(src){ fs.cpSync(src,'dist',{recursive:true}); }\"",
     "start": "node .output/server/index.mjs",
     "build:dev": "vite build --mode development",

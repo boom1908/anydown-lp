@@ -1,6 +1,6 @@
 import "../_runtime.mjs";
 import { r as require_react } from "../_libs/@hookform/resolvers+[...].mjs";
-import { A as getScriptPreloadAttrs, B as isPromise, D as toCrossJSONStream, E as toCrossJSONAsync, F as _getRenderedMatches, H as isRedirect, M as resolveManifestAssetLink, N as resolveManifestCssLink, P as waitForReason, U as rootRouteId, W as isNotFound, a as isSsrResponse, i as disposeSsrResponse, j as getStylesheetHref, n as bindSsrResponseToRequest, o as normalizeSsrResponse, p as RouterProvider, r as defineHandlerCallback, s as stripSsrResponseBody, t as renderRouterToStream, w as fromJSON, z as isDangerousProtocol } from "../_libs/@tanstack/react-router+[...].mjs";
+import { A as getScriptPreloadAttrs, B as isPromise, D as toCrossJSONStream, E as toCrossJSONAsync, F as _getRenderedMatches, H as isRedirect, I as invariant, M as resolveManifestAssetLink, N as resolveManifestCssLink, P as waitForReason, U as rootRouteId, W as isNotFound, a as isSsrResponse, i as disposeSsrResponse, j as getStylesheetHref, n as bindSsrResponseToRequest, o as normalizeSsrResponse, p as RouterProvider, r as defineHandlerCallback, s as stripSsrResponseBody, t as renderRouterToStream, w as fromJSON, z as isDangerousProtocol } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as createServerHistory } from "../_libs/tanstack__history.mjs";
 import { a as getNormalizedURL, c as makeSerovalPlugin, i as attachRouterServerSsrUtils, l as createSerializationAdapter, n as parseSetCookie, o as createRawStreamRPCPlugin, r as splitSetCookieString, s as defaultSerovalDeserializerPlugins, t as mergeHeaders } from "../_libs/@tanstack/router-core+[...].mjs";
 import { i as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
@@ -200,10 +200,6 @@ function isSerializedResponse(protectedHeaders) {
 function getHelperStatus(state, serialized) {
 	const status = state?.status;
 	if (!serialized || status === void 0 || canHaveBody("GET", status)) return status;
-	if (!state.bodylessStatusWarned) {
-		state.bodylessStatusWarned = true;
-		console.warn(`setResponseStatus(${status}) does not apply to serialized server function responses, because the client must decode their body. Return a Response from the server function to send a response without a body.`);
-	}
 }
 /** Helper status text describes the helper status and is ignored with it. */
 function getHelperStatusText(state, helperStatus) {
@@ -499,7 +495,7 @@ var HEADERS = { TSS_SHELL: "X-TSS_SHELL" };
 * the dev styles URL for route-scoped CSS collection.
 */
 async function getStartManifest(matchedRoutes) {
-	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-Z6_vhICe.mjs");
+	const { tsrStartManifest } = await import("../_tanstack-start-manifest_v-BRCJtMXd.mjs");
 	const startManifest = tsrStartManifest();
 	let routes = startManifest.routes;
 	routes[rootRouteId];
@@ -821,7 +817,6 @@ var createMiddleware = (options, __opts) => {
 		}
 	};
 };
-var csrfSymbol = Symbol.for("tanstack-start:csrf-middleware");
 var innerCreateCsrfMiddleware = (opts = {}) => {
 	const continueRequest = (result, ctx) => {
 		return isValidationResultAllowed(result, opts) ? ctx.next() : getFailureResponse(opts, ctx);
@@ -831,7 +826,7 @@ var innerCreateCsrfMiddleware = (opts = {}) => {
 		if (isPromise(result)) return result.then((result) => continueRequest(result, ctx));
 		return continueRequest(result, ctx);
 	};
-	const middleware = createMiddleware().server((ctx) => {
+	return createMiddleware().server((ctx) => {
 		const csrfCtx = ctx;
 		try {
 			if (opts.filter) {
@@ -844,8 +839,6 @@ var innerCreateCsrfMiddleware = (opts = {}) => {
 			return Promise.reject(error);
 		}
 	});
-	Object.defineProperty(middleware, csrfSymbol, { value: true });
-	return middleware;
 };
 var createCsrfMiddleware = innerCreateCsrfMiddleware;
 function isValidationResultAllowed(result, opts) {
@@ -1000,7 +993,7 @@ var handleServerAction = async ({ request, serverFnId }) => {
 	try {
 		let res;
 		if (contentType && (contentType.includes("multipart/form-data") || contentType.includes("application/x-www-form-urlencoded"))) {
-			if (methodUpper === "GET") throw new Error("Invariant failed: GET requests with FormData payloads are not supported");
+			if (methodUpper === "GET") invariant();
 			const formData = await request.formData();
 			const serializedContext = formData.get(TSS_FORMDATA_CONTEXT);
 			formData.delete(TSS_FORMDATA_CONTEXT);
@@ -1012,9 +1005,7 @@ var handleServerAction = async ({ request, serverFnId }) => {
 				const parsedContext = JSON.parse(serializedContext);
 				const deserializedContext = fromJSON(parsedContext, { plugins: getRequestSerovalPlugins() });
 				if (typeof deserializedContext === "object" && deserializedContext) params.context = deserializedContext;
-			} catch (e) {
-				console.warn("Failed to parse FormData context:", e);
-			}
+			} catch (e) {}
 			res = await action(params);
 		} else {
 			let json;
@@ -1822,7 +1813,6 @@ function getStartResponseHeaders(router) {
 	return matches.some((match) => match.headers) ? mergeHeaders(headers, ...matches.map((match) => match.headers)) : headers;
 }
 var cachedEntries;
-var hasWarnedMissingCsrfMiddleware = false;
 var defaultCsrfMiddleware = createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "serverFn" });
 var getCachedBaseManifest = createCachedBaseManifestLoader(() => getStartManifest());
 var getProdBaseManifest = () => getCachedBaseManifest();
@@ -1830,8 +1820,8 @@ var getBaseManifest = getProdBaseManifest;
 var createEarlyHintsForRequest = createEarlyHintsCollector;
 async function loadEntries() {
 	const [routerEntry, startEntry, pluginAdapters] = await Promise.all([
-		import("./router-CuwHIIB8.mjs").then((n) => n.t),
-		import("./start-BGc_20O9.mjs"),
+		import("./router-DK_aAaa4.mjs").then((n) => n.t),
+		import("./start-C4Ut4EB0.mjs"),
 		import("./empty-plugin-adapters-D9UWiqvJ.mjs")
 	]);
 	return {
@@ -1847,39 +1837,11 @@ function getEntries() {
 	});
 	return cachedEntries;
 }
-function hasCsrfMiddleware(middlewares) {
-	return middlewares.some((middleware) => csrfSymbol in middleware);
-}
-function warnMissingCsrfMiddlewareOnce() {
-	if (hasWarnedMissingCsrfMiddleware) return;
-	hasWarnedMissingCsrfMiddleware = true;
-	console.warn(`TanStack Start server functions are not protected by the CSRF middleware.
-
-Server functions are same-origin RPC endpoints and should be protected from cross-site requests.
-
-Add the CSRF middleware in src/start.ts:
-
-  const csrfMiddleware = createCsrfMiddleware({
-    filter: (ctx) => ctx.handlerType === 'serverFn',
-  })
-
-  export const startInstance = createStart(() => ({
-    requestMiddleware: [csrfMiddleware],
-  }))
-
-If you intentionally handle CSRF another way, disable this warning:
-
-  tanstackStart({
-    serverFns: {
-      disableCsrfMiddlewareWarning: true,
-    },
-  })`);
-}
 var ROUTER_BASEPATH = "/";
 var SERVER_FN_BASE = "/_serverFn/";
 var IS_PRERENDERING = process.env.TSS_PRERENDERING === "true";
 var IS_SHELL_ENV = process.env.TSS_SHELL === "true";
-var IS_DEV = true;
+var IS_DEV = false;
 var ERR_NO_RESPONSE = IS_DEV ? `It looks like you forgot to return a response from your server route handler. If you want to defer to the app router, make sure to have a component set in this route.` : "Internal Server Error";
 var ERR_NO_DEFER = IS_DEV ? `You cannot defer to the app router if there is no component defined on this route.` : "Internal Server Error";
 function throwRouteHandlerError() {
@@ -2194,7 +2156,6 @@ function createStartHandler(cbOrOptions) {
 			};
 			let terminal;
 			if (isServerFnRequest) {
-				if (!hasCsrfMiddleware(flattenedRequestMiddlewares)) warnMissingCsrfMiddlewareOnce();
 				const serverFnId = url.pathname.slice(SERVER_FN_BASE.length).split("/")[0];
 				if (!serverFnId) throw new Error("Invalid server action param for serverFnId");
 				terminal = ({ context }) => runWithStartContext({
