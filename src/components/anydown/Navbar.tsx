@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import SupportModal from "./SupportModal";
 
 const links = [
   { label: "FEATURES", section: "features" },
@@ -18,6 +19,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [supportOpen, setSupportOpen] = useState(false);
 
   const navRef = useRef<HTMLElement>(null);
   const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -194,12 +196,13 @@ export default function Navbar() {
             />
           </nav>
 
-          <a
-            href="#"
-            className="hidden xs:inline-flex font-grotesk text-[10px] md:text-[11px] font-bold text-[#0A0A0A] bg-[#FFD600] tracking-[1.5px] px-[14px] md:px-[18px] py-[9px] hover:bg-[#F5F5F0] transition-colors whitespace-nowrap"
+          <button
+            type="button"
+            onClick={() => setSupportOpen(true)}
+            className="hidden xs:inline-flex font-grotesk text-[10px] md:text-[11px] font-bold text-[#0A0A0A] bg-[#FFD600] tracking-[1.5px] px-[14px] md:px-[18px] py-[9px] hover:bg-[#F5F5F0] transition-colors whitespace-nowrap cursor-pointer"
           >
             SUPPORT US
-          </a>
+          </button>
 
           <button
             className="sm:hidden flex flex-col gap-[5px] p-2 -mr-2"
@@ -253,14 +256,23 @@ export default function Navbar() {
               </button>
             );
           })}
-          <a
-            href="#"
-            className="mt-5 font-grotesk text-[11px] font-bold text-[#0A0A0A] bg-[#FFD600] tracking-[1.5px] px-[18px] py-[11px] text-center hover:bg-[#F5F5F0] transition-colors"
+          <button
+            type="button"
+            onClick={() => {
+              setMenuOpen(false);
+              setSupportOpen(true);
+            }}
+            className="mt-5 font-grotesk text-[11px] font-bold text-[#0A0A0A] bg-[#FFD600] tracking-[1.5px] px-[18px] py-[11px] text-center hover:bg-[#F5F5F0] transition-colors cursor-pointer w-full"
           >
             SUPPORT US
-          </a>
+          </button>
         </nav>
       </div>
+
+      <SupportModal
+        open={supportOpen}
+        onOpenChange={setSupportOpen}
+      />
     </header>
   );
 }

@@ -65,7 +65,7 @@ export default function DeveloperContactModal({
         <div className="flex flex-col gap-3 py-3">
           {/* GitHub Discussions */}
           <a
-            href="https://github.com/boom1908/anydown-lp/discussions"
+            href="https://github.com/boom1908/anydown-native/discussions"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-start gap-4 p-3.5 bg-[#111111] border border-[#222222] hover:border-[#FFD600] hover:bg-[#161616] transition-all"
@@ -86,7 +86,7 @@ export default function DeveloperContactModal({
 
           {/* GitHub Issues */}
           <a
-            href="https://github.com/boom1908/anydown-lp/issues/new"
+            href="https://github.com/boom1908/anydown-native/issues/new"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-start gap-4 p-3.5 bg-[#111111] border border-[#222222] hover:border-[#FF4444] hover:bg-[#161616] transition-all"

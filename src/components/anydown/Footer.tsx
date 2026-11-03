@@ -3,7 +3,7 @@ const columns = [
     heading: "APP",
     links: [
       { label: "LATEST APK", href: "#hero" },
-      { label: "SOURCE CODE", href: "https://github.com/boom1908/anydown-lp" },
+      { label: "SOURCE CODE", href: "https://github.com/boom1908/anydown-native" },
       { label: "CHANGELOG", href: "#updates" },
       { label: "MANIFESTO", href: "#credits" },
     ],
@@ -12,9 +12,9 @@ const columns = [
     heading: "DEVELOPER",
     links: [
       { label: "GITHUB PROFILE", href: "https://github.com/boom1908" },
-      { label: "REPOSITORY", href: "https://github.com/boom1908/anydown-lp" },
-      { label: "REPORT A BUG", href: "https://github.com/boom1908/anydown-lp/issues" },
-      { label: "COMMUNITY CHAT", href: "https://github.com/boom1908/anydown-lp/discussions" },
+      { label: "REPOSITORY", href: "https://github.com/boom1908/anydown-native" },
+      { label: "REPORT A BUG", href: "https://github.com/boom1908/anydown-native/issues" },
+      { label: "COMMUNITY CHAT", href: "https://github.com/boom1908/anydown-native/discussions" },
     ],
   },
   {
@@ -22,7 +22,7 @@ const columns = [
     links: [
       { label: "YT-DLP CORE", href: "https://github.com/yt-dlp/yt-dlp" },
       { label: "PRIVACY POLICY", href: "#" },
-      { label: "LICENSE (MIT)", href: "https://github.com/boom1908/anydown-lp/blob/main/LICENSE" },
+      { label: "LICENSE (MIT)", href: "https://github.com/boom1908/anydown-native/blob/main/LICENSE" },
     ],
   },
 ];
@@ -49,7 +49,7 @@ export default function Footer() {
           </p>
           <div className="flex gap-[12px]">
             <a
-              href="https://github.com/boom1908/anydown-lp"
+              href="https://github.com/boom1908/anydown-native"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center w-[36px] h-[36px] bg-[#111111] border border-[#2D2D2D] hover:border-[#FFD600] transition-colors"
